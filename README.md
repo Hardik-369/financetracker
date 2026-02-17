@@ -1,45 +1,56 @@
 # Finance Tracker
 
-A privacy-first, behavioral-finance intelligence web app.
+A privacy-first, behavioral-finance intelligence web app focused on helping users understand **why** they spend.
 
-## Project Docs
-- Product and UX: [design.md](./design.md)
-- Engineering and delivery: [development.md](./development.md)
+## What this repo contains
+- Product direction and UX goals in [`design.md`](./design.md)
+- Technical architecture and delivery plan in [`development.md`](./development.md)
+- A Next.js App Router MVP scaffold (pages + API routes + algorithms + Prisma schema)
 
-## MVP status
-This repository contains an MVP scaffold aligned to the specification docs:
-- App Router pages for dashboard and transaction entry
-- API route handlers for auth, transactions, and insights
-- Core finance algorithms for mood scoring, impulse detection, and projection
-- Prisma schema for core entities (`User`, `Transaction`, `InsightSnapshot`)
+## Runtime configuration
+Create a local env file from the template:
 
-## Environment values
-Copy `.env.example` to `.env.local` for local development.
+```bash
+cp .env.example .env.local
+```
 
 Required variables:
-- `DATABASE_URL` (PostgreSQL connection string)
-- `JWT_SECRET` (long random secret used for signing auth tokens)
-- `NODE_ENV` (`development` locally, `production` on Vercel)
+- `DATABASE_URL`: PostgreSQL connection URL
+- `JWT_SECRET`: long random secret used for token signing
+- `NODE_ENV`: `development` locally, `production` on Vercel
 
-## Local quick start
+See `.env.example` for sample values.
+
+## Local development
 1. Install dependencies
-2. Create env file
-   - `cp .env.example .env.local`
-3. Run migrations
+   ```bash
+   npm install
+   ```
+2. Configure env vars
+   ```bash
+   cp .env.example .env.local
+   ```
+3. Apply database migrations
+   ```bash
+   npx prisma migrate dev
+   ```
 4. Start the app
+   ```bash
+   npm run dev
+   ```
 
-## Vercel deployment
-This repository includes `vercel.json` and is ready for deployment.
+## Deployment (Vercel)
+This repository includes [`vercel.json`](./vercel.json).
 
-### Option A: Vercel dashboard
-1. Import the Git repository in Vercel.
-2. Set these project environment variables:
+### Vercel dashboard flow
+1. Import this repository in Vercel.
+2. Add environment variables in Project Settings:
    - `DATABASE_URL`
    - `JWT_SECRET`
    - `NODE_ENV=production`
-3. Deploy.
+3. Trigger deploy.
 
-### Option B: Vercel CLI
+### Vercel CLI flow
 ```bash
 vercel login
 vercel link
@@ -49,5 +60,6 @@ vercel env add NODE_ENV production
 vercel --prod
 ```
 
-## Notes
-If Prisma is used at runtime/build time, ensure `DATABASE_URL` points to a reachable production database.
+## Troubleshooting
+- If `npm install` fails with network/registry policy issues in your environment, run deployment from a machine/CI runner with npm registry access.
+- Ensure `DATABASE_URL` points to a reachable production Postgres instance before deploying.
